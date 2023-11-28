@@ -4,6 +4,7 @@ import pygame as pg
 
 
 WIDTH, HEIGHT = 1600, 900
+
 delta = {
     pg.K_UP: (0, -5),
     pg.K_DOWN: (0, +5),
@@ -42,6 +43,17 @@ def main():
     bb_rct.centery = random.randint(0, HEIGHT)
     vx, vy = +5, +5
 
+    kk_roto = {
+        (0, -5): pg.transform.rotozoom(kk_img, -90, 1.0),
+        (-5, -5): pg.transform.rotozoom(kk_img, -45, 1.0),
+        (-5, 0): pg.transform.rotozoom(kk_img, 0, 1.0),
+        (-5, +5): pg.transform.rotozoom(kk_img, 45, 1.0),
+        (0, +5): pg.transform.rotozoom(kk_img, 90, 1.0),
+        (+5, +5): pg.transform.rotozoom(kk_img, 45, 1.0),
+        (+5, 0): pg.transform.rotozoom(kk_img, 0, 1.0),
+        (+5, -5): pg.transform.rotozoom(kk_img, -45, 1.0)
+    }
+
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -59,7 +71,14 @@ def main():
             if key_lst[k]:
                 sum_mv[0] += tpl[0]
                 sum_mv[1] += tpl[1]
-        
+            if (tuple(sum_mv) in kk_roto):
+                kk_img = kk_roto[tuple(sum_mv)]
+            if sum_mv[0] > 0:
+                kk_img = pg.transform.flip(kk_img, True, False)
+
+        for k, muki in kk_roto.items():
+            if sum_mv == k:
+                kk_img = muki
 
         screen.blit(bg_img, [0, 0])
         kk_rct.move_ip(sum_mv[0], sum_mv[1])
