@@ -43,7 +43,7 @@ def main():
     bb_rct = bb_img.get_rect()
     bb_rct.centerx = random.randint(0, WIDTH)
     bb_rct.centery = random.randint(0, HEIGHT)
-    
+
     vx, vy = +5, +5
     accs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] # 加速度リスト
     i = 0
@@ -76,7 +76,7 @@ def main():
             
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
-        for k, tpl in delta.items(): # 上下左右キーで進む
+        for k, tpl in delta.items(): # 上下左右キーで進む　
             if key_lst[k]:
                 sum_mv[0] += tpl[0]
                 sum_mv[1] += tpl[1]
