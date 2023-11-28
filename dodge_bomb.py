@@ -31,18 +31,21 @@ def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
+
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = [900, 400]
+
     bb_img = pg.Surface((20, 20))
     pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)
     bb_img.set_colorkey((0, 0, 0))
     bb_rct = bb_img.get_rect()
     bb_rct.centerx = random.randint(0, WIDTH)
     bb_rct.centery = random.randint(0, HEIGHT)
+    
     vx, vy = +5, +5
-    accs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    accs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] # 加速度リスト
     i = 0
 
     kk_roto = {
@@ -67,30 +70,28 @@ def main():
             print("Game Over!")
             return
         
-        if (tmr%100 == 0):
+        if (tmr%100 == 0): # タイマーが100の倍数の時に加速
             if i < 10:
                 i += 1
             
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
-        for k, tpl in delta.items():
+        for k, tpl in delta.items(): # 上下左右キーで進む
             if key_lst[k]:
                 sum_mv[0] += tpl[0]
                 sum_mv[1] += tpl[1]
-            if (tuple(sum_mv) in kk_roto):
+            if (tuple(sum_mv) in kk_roto): # 方向転換
                 kk_img = kk_roto[tuple(sum_mv)]
-            if sum_mv[0] > 0:
+            if sum_mv[0] > 0: # 左右反転
                 kk_img = pg.transform.flip(kk_img, True, False)
 
-        for k, muki in kk_roto.items():
-            if sum_mv == k:
-                kk_img = muki
-
         screen.blit(bg_img, [0, 0])
+
         kk_rct.move_ip(sum_mv[0], sum_mv[1])
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
+
         bb_rct.move_ip(vx*accs[i], vy*accs[i])
         yoko, tate = check_bound(bb_rct)
         if not yoko:
@@ -98,6 +99,7 @@ def main():
         if not tate:
             vy *= -1
         screen.blit(bb_img, bb_rct)
+
         pg.display.update()
         tmr += 1
         clock.tick(50)
