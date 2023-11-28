@@ -42,6 +42,8 @@ def main():
     bb_rct.centerx = random.randint(0, WIDTH)
     bb_rct.centery = random.randint(0, HEIGHT)
     vx, vy = +5, +5
+    accs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    i = 0
 
     kk_roto = {
         (0, -5): pg.transform.rotozoom(kk_img, -90, 1.0),
@@ -64,6 +66,10 @@ def main():
         if kk_rct.colliderect(bb_rct):
             print("Game Over!")
             return
+        
+        if (tmr%100 == 0):
+            if i < 10:
+                i += 1
             
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -85,7 +91,7 @@ def main():
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
-        bb_rct.move_ip(vx, vy)
+        bb_rct.move_ip(vx*accs[i], vy*accs[i])
         yoko, tate = check_bound(bb_rct)
         if not yoko:
             vx *= -1
